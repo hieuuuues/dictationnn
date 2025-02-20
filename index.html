@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Luyện Nghe Dictation Tiếng Anh</title>
+    <style>
+      :root {
+        --primary-color: #3498db;
+        --secondary-color: #2ecc71;
+        --background-color: #f5f7fa;
+        --text-color: #2c3e50;
+        --border-radius: 8px;
+        --box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        padding: 10px;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 15px;
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+      }
+
+      h1 {
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+      }
+
+      .control-panel {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .settings-panel {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        align-items: center;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: var(--border-radius);
+      }
+
+      .speed-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      textarea {
+        width: 100%;
+        height: 120px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        resize: vertical;
+        font-size: 16px;
+        margin-bottom: 20px;
+        transition: border-color 0.3s;
+      }
+
+      textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+      }
+
+      button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      button:hover {
+        background-color: #2980b9;
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(1px);
+      }
+
+      select {
+        padding: 10px;
+        border-radius: var(--border-radius);
+        border: 1px solid #ddd;
+        font-size: 16px;
+        width: 100%;
+        cursor: pointer;
+      }
+
+      .practice-area {
+        margin-top: 20px;
+      }
+
+      .sentence-container {
+        margin-bottom: 15px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        background-color: white;
+        transition: transform 0.3s;
+      }
+
+      .sentence-container:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--box-shadow);
+      }
+
+      .sentence-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .sentence-input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: var(--border-radius);
+        font-size: 16px;
+        transition: all 0.3s;
+      }
+
+      .sentence-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+      }
+
+      .sentence-input.correct {
+        border-color: var(--secondary-color);
+        background-color: rgba(46, 204, 113, 0.1);
+      }
+
+      .sentence-input.incorrect {
+        border-color: #e74c3c;
+        background-color: rgba(231, 76, 60, 0.1);
+      }
+
+      .feedback {
+        margin-top: 15px;
+        font-weight: 500;
+        padding: 10px;
+        border-radius: var(--border-radius);
+      }
+
+      .correct {
+        color: var(--secondary-color);
+        background-color: rgba(46, 204, 113, 0.1);
+      }
+
+      .incorrect {
+        color: #e74c3c;
+        background-color: rgba(231, 76, 60, 0.1);
+      }
+
+      .play-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--primary-color);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin: 0 auto 10px auto;
+      }
+
+      .play-button:hover {
+        transform: scale(1.1);
+      }
+
+      .result-summary {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 16px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: var(--border-radius);
+      }
+
+      .progress-container {
+        margin: 15px 0;
+        background-color: #eee;
+        border-radius: 20px;
+        height: 8px;
+        overflow: hidden;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background-color: var(--secondary-color);
+        border-radius: 20px;
+        width: 0%;
+        transition: width 0.5s;
+      }
+
+      .keyboard-shortcuts {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: var(--border-radius);
+        font-size: 13px;
+      }
+
+      .keyboard-shortcuts h3 {
+        margin-bottom: 10px;
+        color: var(--primary-color);
+      }
+
+      .shortcut-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .shortcut-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .key {
+        background-color: #e9ecef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: monospace;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: var(--border-radius);
+      }
+
+      .stat-item {
+        text-align: center;
+        padding: 10px;
+      }
+
+      .stat-value {
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--primary-color);
+      }
+
+      .stat-label {
+        font-size: 13px;
+        color: #6c757d;
+      }
+
+      /* Enhanced Mobile Responsiveness */
+      @media (max-width: 768px) {
+        body {
+          padding: 5px;
+        }
+
+        .container {
+          padding: 10px;
+        }
+
+        h1 {
+          font-size: 1.5em;
+          margin-bottom: 15px;
+        }
+
+        .control-panel,
+        .settings-panel {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .speed-control {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        button {
+          padding: 12px 10px;
+          font-size: 15px;
+          width: 100%;
+        }
+
+        textarea {
+          height: 100px;
+        }
+
+        .sentence-controls {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .play-button {
+          margin-bottom: 10px;
+        }
+
+        .stats {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Small phones */
+      @media (max-width: 480px) {
+        body {
+          padding: 3px;
+        }
+
+        .container {
+          padding: 8px;
+        }
+
+        h1 {
+          font-size: 1.3em;
+        }
+
+        textarea,
+        .sentence-input {
+          padding: 10px;
+          font-size: 15px;
+        }
+
+        .feedback,
+        .result-summary {
+          font-size: 14px;
+          padding: 10px;
+        }
+
+        .keyboard-shortcuts {
+          font-size: 12px;
+        }
+
+        .stat-value {
+          font-size: 18px;
+        }
+
+        .stat-label {
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Luyện Nghe Dictation Tiếng Anh</h1>
+
+      <div class="settings-panel">
+        <div class="speed-control">
+          <label for="speedRate">Tốc độ:</label>
+          <select id="speedRate">
+            <option value="0.8">0.8x</option>
+            <option value="1.0" selected>1.0x</option>
+            <option value="1.2">1.2x</option>
+            <option value="1.5">1.5x</option>
+          </select>
+        </div>
+        <div class="speed-control">
+          <label for="autoReplay">Tự động phát lại:</label>
+          <select id="autoReplay">
+            <option value="0">Tắt</option>
+            <option value="1">1 lần</option>
+            <option value="2">2 lần</option>
+            <option value="3">3 lần</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-panel">
+        <textarea
+          id="fullText"
+          placeholder="Nhập đoạn văn tiếng Anh vào đây..."
+        ></textarea>
+
+        <div style="display: flex; width: 100%; gap: 15px">
+          <select id="voiceSelect">
+            <option value="">Chọn giọng đọc...</option>
+          </select>
+
+          <button id="processBtn">Tạo bài tập</button>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-item">
+          <div id="totalSentences" class="stat-value">0</div>
+          <div class="stat-label">Tổng số câu</div>
+        </div>
+        <div class="stat-item">
+          <div id="correctAnswers" class="stat-value">0</div>
+          <div class="stat-label">Câu đúng</div>
+        </div>
+        <div class="stat-item">
+          <div id="accuracy" class="stat-value">0%</div>
+          <div class="stat-label">Độ chính xác</div>
+        </div>
+      </div>
+
+      <div id="practiceArea" class="practice-area"></div>
+
+      <div id="resultSummary" class="result-summary"></div>
+
+      <div class="keyboard-shortcuts">
+        <h3>Phím tắt</h3>
+        <div class="shortcut-list">
+          <div class="shortcut-item">
+            <span class="key">Ctrl</span>
+            <span>Nghe lại câu</span>
+          </div>
+          <div class="shortcut-item">
+            <span class="key">Enter</span>
+            <span>Kiểm tra / Câu tiếp theo</span>
+          </div>
+          <div class="shortcut-item">
+            <span class="key">Tab</span>
+            <span>Chuyển câu tiếp theo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Elements
+        const fullTextArea = document.getElementById("fullText");
+        const voiceSelect = document.getElementById("voiceSelect");
+        const processBtn = document.getElementById("processBtn");
+        const practiceArea = document.getElementById("practiceArea");
+        const progressBar = document.getElementById("progressBar");
+        const resultSummary = document.getElementById("resultSummary");
+        const speedRate = document.getElementById("speedRate");
+        const autoReplay = document.getElementById("autoReplay");
+        const statsTotal = document.getElementById("totalSentences");
+        const statsCorrect = document.getElementById("correctAnswers");
+        const statsAccuracy = document.getElementById("accuracy");
+
+        // Variables
+        let sentences = [];
+        let currentSentenceIndex = 0;
+        let correctCount = 0;
+        let synth = window.speechSynthesis;
+        let voices = [];
+        let answerChecked = false;
+        let replayCount = 0;
+        let currentKeydownHandler = null;
+
+        // Load voices
+        function loadVoices() {
+          voices = synth.getVoices();
+          const englishVoices = voices.filter((voice) =>
+            voice.lang.includes("en")
+          );
+          voiceSelect.innerHTML = '<option value="">Chọn giọng đọc...</option>';
+          englishVoices.forEach((voice, index) => {
+            const option = document.createElement("option");
+            option.value = index;
+            option.textContent = `${voice.name} (${voice.lang})`;
+            voiceSelect.appendChild(option);
+          });
+        }
+
+        if (synth.onvoiceschanged !== undefined) {
+          synth.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        function updateStats() {
+          statsTotal.textContent = sentences.length;
+          statsCorrect.textContent = correctCount;
+          statsAccuracy.textContent = `${Math.round(
+            (correctCount / Math.max(currentSentenceIndex, 1)) * 100
+          )}%`;
+        }
+
+        function speakSentence(text) {
+          if (synth.speaking) {
+            synth.cancel();
+          }
+
+          setTimeout(() => {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.voice = voices[parseInt(voiceSelect.value)];
+            utterance.rate = parseFloat(speedRate.value);
+            utterance.pitch = 1;
+            synth.speak(utterance);
+          }, 100);
+        }
+
+        function playWithAutoReplay(text) {
+          if (synth.speaking) {
+            synth.cancel();
+          }
+
+          const replay = parseInt(autoReplay.value);
+          replayCount = 0;
+
+          function playNext() {
+            if (replayCount < replay) {
+              speakSentence(text);
+              replayCount++;
+              if (replayCount < replay) {
+                setTimeout(playNext, 2000);
+              }
+            }
+          }
+
+          playNext();
+        }
+
+        // Hàm mới để so sánh từng từ
+        function compareWords(userWords, correctWords) {
+          const result = [];
+          const maxLength = Math.max(userWords.length, correctWords.length);
+
+          for (let i = 0; i < maxLength; i++) {
+            if (i >= userWords.length) {
+              // Người dùng thiếu từ
+              result.push({
+                word: correctWords[i],
+                status: "missing",
+                correctWord: correctWords[i],
+              });
+            } else if (i >= correctWords.length) {
+              // Người dùng thừa từ
+              result.push({
+                word: userWords[i],
+                status: "extra",
+                correctWord: null,
+              });
+            } else if (
+              userWords[i].toLowerCase() === correctWords[i].toLowerCase()
+            ) {
+              // Từ đúng
+              result.push({
+                word: userWords[i],
+                status: "correct",
+                correctWord: correctWords[i],
+              });
+            } else {
+              // Từ sai
+              result.push({
+                word: userWords[i],
+                status: "incorrect",
+                correctWord: correctWords[i],
+              });
+            }
+          }
+
+          return result;
+        }
+
+        // Hàm mới để tạo HTML hiển thị từng từ với màu sắc tương ứng
+        function createWordComparisonHTML(comparisonResult) {
+          let html =
+            '<div class="word-comparison" style="margin-top: 15px; line-height: 1.8;">';
+          html += "<p><strong>Câu trả lời của bạn:</strong></p>";
+          html +=
+            '<div style="margin: 10px 0; padding: 10px; background-color: #f8f9fa; border-radius: 8px;">';
+
+          comparisonResult.forEach((item) => {
+            if (item.status === "correct") {
+              html += `<span style="background-color: rgba(46, 204, 113, 0.2); padding: 2px 4px; border-radius: 4px; margin-right: 5px;">${item.word}</span>`;
+            } else if (item.status === "incorrect") {
+              html += `<span style="background-color: rgba(231, 76, 60, 0.2); padding: 2px 4px; border-radius: 4px; margin-right: 5px; text-decoration: line-through;">${item.word}</span>`;
+            } else if (item.status === "extra") {
+              html += `<span style="background-color: rgba(231, 76, 60, 0.2); padding: 2px 4px; border-radius: 4px; margin-right: 5px; text-decoration: line-through;">${item.word}</span>`;
+            }
+          });
+
+          html += "</div>";
+          html += "<p><strong>Đáp án đúng:</strong></p>";
+          html +=
+            '<div style="margin: 10px 0; padding: 10px; background-color: #f8f9fa; border-radius: 8px;">';
+
+          // Lọc chỉ lấy những từ đúng từ câu đúng
+          const correctWords = comparisonResult
+            .filter((item) => item.correctWord)
+            .map((item) => {
+              if (item.status === "correct") {
+                return `<span style="background-color: rgba(46, 204, 113, 0.2); padding: 2px 4px; border-radius: 4px; margin-right: 5px;">${item.correctWord}</span>`;
+              } else if (
+                item.status === "incorrect" ||
+                item.status === "missing"
+              ) {
+                return `<span style="background-color: rgba(52, 152, 219, 0.2); padding: 2px 4px; border-radius: 4px; margin-right: 5px;">${item.correctWord}</span>`;
+              }
+              return "";
+            });
+
+          html += correctWords.join("");
+          html += "</div>";
+          html +=
+            '<p style="font-size: 0.9em; margin-top: 10px; text-align: center;">Nhấn Enter để tiếp tục</p>';
+          html += "</div>";
+
+          return html;
+        }
+
+        function checkAnswer(input, index) {
+          const userAnswer = input.value.trim();
+          const correctAnswer = sentences[index].trim();
+          const feedbackDiv = input.nextElementSibling;
+
+          // Xóa dấu câu để so sánh nội dung chính
+          const cleanUserAnswer = userAnswer
+            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+            .trim();
+          const cleanCorrectAnswer = correctAnswer
+            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+            .trim();
+
+          // Chia thành các từ để so sánh chi tiết
+          const userWords = cleanUserAnswer.split(/\s+/);
+          const correctWords = cleanCorrectAnswer.split(/\s+/);
+
+          // So sánh từng từ
+          const comparisonResult = compareWords(userWords, correctWords);
+
+          // Đếm số từ đúng
+          const correctWordCount = comparisonResult.filter(
+            (item) => item.status === "correct"
+          ).length;
+          const totalWords = correctWords.length;
+          const wordAccuracy = Math.round(
+            (correctWordCount / totalWords) * 100
+          );
+
+          // Đánh giá kết quả tổng thể
+          const isCorrectEnough = wordAccuracy >= 80; // Nếu đúng từ 80% từ trở lên
+
+          if (isCorrectEnough) {
+            feedbackDiv.innerHTML = `
+        <div class="feedback correct">
+          <span>✓ Chính xác! (${wordAccuracy}% từ đúng)</span>
+        </div>
+        ${createWordComparisonHTML(comparisonResult)}
+      `;
+            input.classList.add("correct");
+            correctCount++;
+          } else {
+            feedbackDiv.innerHTML = `
+        <div class="feedback incorrect">
+          <span>✗ Chưa chính xác (${wordAccuracy}% từ đúng)</span>
+        </div>
+        ${createWordComparisonHTML(comparisonResult)}
+      `;
+            input.classList.add("incorrect");
+          }
+
+          updateStats();
+          input.disabled = true;
+        }
+
+        function createSentenceElement(index) {
+          if (index >= sentences.length) {
+            const percentage = Math.round(
+              (correctCount / sentences.length) * 100
+            );
+            resultSummary.innerHTML = `
+        <h2>Kết quả cuối cùng</h2>
+        <p>Số câu đúng: ${correctCount}/${sentences.length} (${percentage}%)</p>
+        <div style="margin: 20px 0;">
+          <button id="restartBtn">Làm lại</button>
+          <button id="newTextBtn">Bài mới</button>
+        </div>
+      `;
+
+            document
+              .getElementById("restartBtn")
+              .addEventListener("click", () => {
+                processSentences();
+              });
+
+            document
+              .getElementById("newTextBtn")
+              .addEventListener("click", () => {
+                fullTextArea.value = "";
+                practiceArea.innerHTML = "";
+                resultSummary.innerHTML = "";
+                progressBar.style.width = "0%";
+                updateStats();
+                fullTextArea.focus();
+              });
+            return;
+          }
+
+          const sentenceDiv = document.createElement("div");
+          sentenceDiv.className = "sentence-container";
+          sentenceDiv.innerHTML = `
+      <div class="sentence-controls">
+        <div class="play-button" title="Nghe (Ctrl)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+        </div>
+        <span>Câu ${index + 1}/${sentences.length}</span>
+        <span id="replayCount"></span>
+      </div>
+      <input type="text" class="sentence-input" placeholder="Nhập câu bạn nghe được..." autocomplete="off">
+      <div class="feedback"></div>
+    `;
+
+          practiceArea.innerHTML = "";
+          practiceArea.appendChild(sentenceDiv);
+
+          const input = sentenceDiv.querySelector(".sentence-input");
+          const playButton = sentenceDiv.querySelector(".play-button");
+
+          // Remove previous keydown handler if exists
+          if (currentKeydownHandler) {
+            document.removeEventListener("keydown", currentKeydownHandler);
+          }
+
+          // Create new keydown handler for Ctrl key
+          currentKeydownHandler = function (e) {
+            if (e.ctrlKey && !e.shiftKey && !e.altKey && !e.metaKey) {
+              playWithAutoReplay(sentences[currentSentenceIndex]);
+            }
+          };
+
+          // Add new keydown handler
+          document.addEventListener("keydown", currentKeydownHandler);
+
+          playButton.addEventListener("click", () => {
+            playWithAutoReplay(sentences[index]);
+          });
+
+          // Xử lý sự kiện Enter
+          document.addEventListener("keydown", function handleEnterKey(e) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              if (!answerChecked) {
+                checkAnswer(input, index);
+                answerChecked = true;
+              } else if (currentSentenceIndex < sentences.length - 1) {
+                currentSentenceIndex++;
+                updateProgressBar();
+                // Xóa event listener cũ trước khi tạo câu mới
+                document.removeEventListener("keydown", handleEnterKey);
+                createSentenceElement(currentSentenceIndex);
+                answerChecked = false;
+              }
+            }
+          });
+
+          input.focus();
+          playWithAutoReplay(sentences[index]);
+        }
+
+        function updateProgressBar() {
+          const progress = (currentSentenceIndex / sentences.length) * 100;
+          progressBar.style.width = `${progress}%`;
+        }
+
+        function processSentences() {
+          const text = fullTextArea.value.trim();
+          if (!text) {
+            alert("Vui lòng nhập đoạn văn!");
+            return;
+          }
+
+          if (voiceSelect.value === "") {
+            alert("Vui lòng chọn giọng đọc!");
+            return;
+          }
+
+          sentences = text
+            .split(/(?<=[.!?])\s+/)
+            .filter((sentence) => sentence.trim().length > 0);
+
+          if (sentences.length === 0) {
+            alert("Không tìm thấy câu nào trong đoạn văn!");
+            return;
+          }
+
+          currentSentenceIndex = 0;
+          correctCount = 0;
+          answerChecked = false;
+
+          practiceArea.innerHTML = "";
+          resultSummary.innerHTML = "";
+
+          createSentenceElement(0);
+          updateProgressBar();
+          updateStats();
+        }
+
+        processBtn.addEventListener("click", processSentences);
+
+        fullTextArea.value =
+          "Learning a new language takes time and dedication. It requires consistent practice and patience. Many people find that immersion is the best approach. When you surround yourself with the language, you learn more quickly.";
+
+        fullTextArea.addEventListener("paste", (e) => {
+          e.preventDefault();
+          const text = e.clipboardData.getData("text/plain");
+          const cleanText = text
+            .replace(/[\r\n]+/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+          document.execCommand("insertText", false, cleanText);
+        });
+      });
+    </script>
+  </body>
+</html>
